@@ -1,27 +1,27 @@
 import { Button } from "@ui/components/Button"
-import UserCard from "./UserCard"
-import useUsers from "@ui/hooks/useUsers"
 import axios from "@ui/lib/axios"
+import UserCard from "./UserCard"
 
 async function getUsers() {
-  const res = await axios.get<ApiResponse<WithPagination<User[]>>>("/users")
+  const res = await axios.get<ApiResponse<WithPagination<User[]>>>("/users", {
+    headers: {
+      "Cache-Control": "no-cache",
+      Pragma: "no-cache",
+      Expires: "0",
+    },
+  })
   return res.data.data.data
+
+  // const res = await fetch("http://localhost:3000/users", {
+  //   next: { revalidate: 1 },
+  // })
+  // const data = res.json()
+
+  // return data
 }
 
 export default async function Home() {
-  // const { users: x } = useUsers()
-  console.log(await getUsers())
-
-  const users = [
-    {
-      id: 1,
-      name: "string",
-      username: "string",
-      _count: {
-        contacts: 1,
-      },
-    },
-  ]
+  const users = await getUsers()
 
   return (
     <>

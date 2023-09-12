@@ -35,7 +35,7 @@ export class UsersService {
     q: string;
   }): Promise<WithPagination<any[]>> {
     const { page, q } = params;
-    const take = 5;
+    const take = 50;
     const skip = (page - 1) * take;
 
     const where: Prisma.UserWhereInput = {
