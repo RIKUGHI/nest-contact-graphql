@@ -1,0 +1,44 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+type ContactCount {
+  contacts: ID!
+}
+
+input CreateUserInput {
+  """Example field (placeholder)"""
+  exampleField: Int!
+}
+
+type Mutation {
+  createUser(createUserInput: CreateUserInput!): User!
+  removeUser(id: Int!): User!
+  updateUser(updateUserInput: UpdateUserInput!): User!
+}
+
+type Pagination {
+  current_page: Int!
+  data: [User!]!
+  last_page: Int!
+  per_page: Int!
+  total: Int!
+}
+
+type Query {
+  user(id: Int!): User!
+  users: Pagination!
+}
+
+input UpdateUserInput {
+  """Example field (placeholder)"""
+  exampleField: Int
+  id: Int!
+}
+
+type User {
+  _count: ContactCount!
+  id: ID!
+  name: String!
+  username: String!
+}
