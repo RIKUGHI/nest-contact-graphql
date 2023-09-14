@@ -1,10 +1,17 @@
-import { Resolver, Query, Mutation, Args, Int } from '@nestjs/graphql';
-import { UsersService } from './users.service';
-import { User } from './entities/user.entity';
+import {
+  Args,
+  Int,
+  Mutation,
+  Query,
+  ResolveField,
+  Resolver,
+} from '@nestjs/graphql';
 import { CreateUserInput } from './dto/create-user.input';
+import { QueryUserArgs } from './dto/query-user.arg';
 import { UpdateUserInput } from './dto/update-user.input';
 import { PaginatedUser } from './entities/paginated-user.entity';
-import { QueryUserInput } from './dto/query-user.input';
+import { User } from './entities/user.entity';
+import { UsersService } from './users.service';
 
 @Resolver(() => User)
 export class UsersResolver {
@@ -16,10 +23,10 @@ export class UsersResolver {
   }
 
   @Query(() => PaginatedUser, { name: 'users' })
-  findAll(@Args('queryUserInput') queryUserInput: QueryUserInput) {
+  findAll(@Args() queryUserArg: QueryUserArgs) {
     return this.usersService.users({
-      page: queryUserInput.page,
-      q: queryUserInput.q ?? '',
+      page: queryUserArg.page,
+      q: queryUserArg.q ?? '',
     });
   }
 
@@ -36,5 +43,10 @@ export class UsersResolver {
   @Mutation(() => User)
   removeUser(@Args('id', { type: () => Int }) id: number) {
     return this.usersService.remove(id);
+  }
+
+  @ResolveField('posts', (returns) => String)
+  async getPosts() {
+    return '';
   }
 }

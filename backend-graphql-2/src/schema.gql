@@ -27,12 +27,7 @@ type PaginatedUser {
 
 type Query {
   user(id: Int!): User!
-  users(queryUserInput: QueryUserInput!): PaginatedUser!
-}
-
-input QueryUserInput {
-  page: Int!
-  q: String
+  users(page: Int!, q: String): PaginatedUser!
 }
 
 input UpdateUserInput {
@@ -45,5 +40,6 @@ type User {
   _count: ContactCount!
   id: ID!
   name: String!
+  posts: String!
   username: String!
 }
