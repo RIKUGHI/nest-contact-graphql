@@ -8,7 +8,7 @@ class ContactCount {
 
 @ObjectType()
 export class User {
-  @Field(() => ID)
+  @Field(() => Int)
   id: number;
 
   @Field()

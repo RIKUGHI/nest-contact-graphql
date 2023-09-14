@@ -2,8 +2,25 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
+type Contact {
+  email: String!
+  first_name: String!
+  id: Int!
+  last_name: String!
+  phone: String!
+  user: User!
+  userId: Int!
+}
+
 type ContactCount {
   contacts: Int!
+}
+
+input CreateContactInput {
+  email: String!
+  first_name: String!
+  last_name: String!
+  phone: String!
 }
 
 input CreateUserInput {
@@ -12,9 +29,20 @@ input CreateUserInput {
 }
 
 type Mutation {
+  createContact(createContactInput: CreateContactInput!): Contact!
   createUser(createUserInput: CreateUserInput!): User!
+  removeContact(id: Int!): Contact!
   removeUser(id: Int!): User!
+  updateContact(updateContactInput: UpdateContactInput!): Contact!
   updateUser(updateUserInput: UpdateUserInput!): User!
+}
+
+type PaginatedContact {
+  current_page: Int!
+  last_page: Int!
+  per_page: Int!
+  result: [Contact!]!
+  total: Int!
 }
 
 type PaginatedUser {
@@ -26,8 +54,18 @@ type PaginatedUser {
 }
 
 type Query {
+  contact(id: Int!): Contact!
+  contacts(page: Int!, q: String): PaginatedContact!
   user(id: Int!): User!
   users(page: Int!, q: String): PaginatedUser!
+}
+
+input UpdateContactInput {
+  email: String
+  first_name: String
+  id: Int!
+  last_name: String
+  phone: String
 }
 
 input UpdateUserInput {
@@ -38,8 +76,8 @@ input UpdateUserInput {
 
 type User {
   _count: ContactCount!
-  id: ID!
+  contacts: PaginatedContact!
+  id: Int!
   name: String!
-  posts: String!
   username: String!
 }
