@@ -3,7 +3,7 @@
 # ------------------------------------------------------
 
 type ContactCount {
-  contacts: ID!
+  contacts: Int!
 }
 
 input CreateUserInput {
@@ -17,17 +17,17 @@ type Mutation {
   updateUser(updateUserInput: UpdateUserInput!): User!
 }
 
-type Pagination {
+type PaginatedUser {
   current_page: Int!
-  data: [User!]!
   last_page: Int!
   per_page: Int!
+  result: [User!]!
   total: Int!
 }
 
 type Query {
   user(id: Int!): User!
-  users: Pagination!
+  users: PaginatedUser!
 }
 
 input UpdateUserInput {

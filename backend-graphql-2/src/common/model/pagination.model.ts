@@ -1,8 +1,7 @@
-import { ObjectType, Field, Int } from '@nestjs/graphql';
-import { User } from 'src/users/entities/user.entity';
+import { Field, Int, ObjectType } from '@nestjs/graphql';
 
 @ObjectType()
-export class Pagination<T> {
+export class Pagination {
   @Field(() => Int)
   total: number;
 
@@ -14,7 +13,4 @@ export class Pagination<T> {
 
   @Field(() => Int)
   last_page: number;
-
-  @Field(() => [User])
-  data: T[];
 }

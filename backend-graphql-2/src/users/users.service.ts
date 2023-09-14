@@ -56,13 +56,12 @@ export class UsersService {
       }),
     ]);
 
-    // return users;
     return {
       total: count,
       per_page: take,
       current_page: page,
       last_page: Math.ceil(count / take),
-      data: users,
+      result: users,
     };
   }
 

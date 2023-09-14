@@ -4,6 +4,7 @@ import { User } from './entities/user.entity';
 import { CreateUserInput } from './dto/create-user.input';
 import { UpdateUserInput } from './dto/update-user.input';
 import { Pagination } from 'src/common/model/pagination.model';
+import { PaginatedUser } from './entities/paginated-user.entity';
 
 @Resolver(() => User)
 export class UsersResolver {
@@ -14,7 +15,7 @@ export class UsersResolver {
     return this.usersService.create(createUserInput);
   }
 
-  @Query(() => Pagination<User>, { name: 'users' })
+  @Query(() => PaginatedUser, { name: 'users' })
   findAll() {
     return this.usersService.users({ page: 1, q: '' });
   }

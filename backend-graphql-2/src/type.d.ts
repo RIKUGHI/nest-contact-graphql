@@ -3,7 +3,7 @@ interface WithPagination<T> {
   per_page: number;
   current_page: number;
   last_page: number;
-  data: T;
+  result: T;
 }
 
 interface ApiResponse<T> {

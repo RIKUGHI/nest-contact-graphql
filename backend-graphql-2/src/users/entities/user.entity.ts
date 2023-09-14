@@ -2,7 +2,7 @@ import { ObjectType, Field, Int, ID } from '@nestjs/graphql';
 
 @ObjectType()
 class ContactCount {
-  @Field(() => ID)
+  @Field(() => Int)
   contacts: number;
 }
 
