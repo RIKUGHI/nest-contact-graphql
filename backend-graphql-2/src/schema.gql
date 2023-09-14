@@ -27,7 +27,12 @@ type PaginatedUser {
 
 type Query {
   user(id: Int!): User!
-  users: PaginatedUser!
+  users(queryUserInput: QueryUserInput!): PaginatedUser!
+}
+
+input QueryUserInput {
+  page: Int!
+  q: String
 }
 
 input UpdateUserInput {
