@@ -14,6 +14,12 @@ import { PrismaService } from './prisma.service';
       driver: ApolloDriver,
       autoSchemaFile: join(process.cwd(), 'src/schema.gql'),
       sortSchema: true,
+      installSubscriptionHandlers: true,
+      // subscriptions: {
+      //   'graphql-ws': {
+      //     path: 'ws://localhost:3000/graphql',
+      //   },
+      // },
     }),
   ],
 })

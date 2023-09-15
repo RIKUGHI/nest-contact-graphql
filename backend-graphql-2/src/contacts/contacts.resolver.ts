@@ -1,20 +1,32 @@
-import { Resolver, Query, Mutation, Args, Int } from '@nestjs/graphql';
+import {
+  Resolver,
+  Query,
+  Mutation,
+  Args,
+  Int,
+  Subscription,
+} from '@nestjs/graphql';
 import { ContactsService } from './contacts.service';
 import { Contact } from './entities/contact.entity';
 import { CreateContactInput } from './dto/create-contact.input';
 import { UpdateContactInput } from './dto/update-contact.input';
 import { PaginatedContact } from './entities/paginated-contact.entity';
 import { QueryContactArgs } from './dto/query-contact.args';
+import { PubSub } from 'graphql-subscriptions';
+
+const pubSub = new PubSub();
 
 @Resolver(() => Contact)
 export class ContactsResolver {
   constructor(private readonly contactsService: ContactsService) {}
 
   @Mutation(() => Contact)
-  createContact(
+  async createContact(
     @Args('createContactInput') createContactInput: CreateContactInput,
   ) {
-    return this.contactsService.create(createContactInput);
+    const contact = await this.contactsService.create(createContactInput);
+    pubSub.publish('contactAdded', { contactAdded: contact });
+    return contact;
   }
 
   @Query(() => PaginatedContact, { name: 'contacts' })
@@ -40,5 +52,13 @@ export class ContactsResolver {
   @Mutation(() => Contact)
   removeContact(@Args('id', { type: () => Int }) id: number) {
     return this.contactsService.remove(id);
+  }
+
+  @Subscription(() => Contact, {
+    name: 'contactAdded',
+    // resolve: (value) => value,
+  })
+  contactAdded() {
+    return pubSub.asyncIterator('contactAdded');
   }
 }

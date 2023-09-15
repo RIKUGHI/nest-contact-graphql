@@ -60,6 +60,10 @@ type Query {
   users(page: Int!, q: String): PaginatedUser!
 }
 
+type Subscription {
+  contactAdded: Contact!
+}
+
 input UpdateContactInput {
   email: String
   first_name: String
