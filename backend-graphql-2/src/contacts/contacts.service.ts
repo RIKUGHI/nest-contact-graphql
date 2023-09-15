@@ -36,7 +36,7 @@ export class ContactsService {
   }
 
   async contacts(params: {
-    userId?: number;
+    userId: number;
     page: number;
     q: string;
   }): Promise<WithPagination<any[]>> {
@@ -45,7 +45,7 @@ export class ContactsService {
     const skip = (page - 1) * take;
 
     const where: Prisma.ContactWhereInput = {
-      ...(params.userId && { userId: params.userId }),
+      userId: params.userId,
       OR: [
         {
           first_name: {
@@ -95,13 +95,13 @@ export class ContactsService {
     };
   }
 
-  async create(createContactInput: CreateContactInput) {
+  async create(userId: number, createContactInput: CreateContactInput) {
     return this.prisma.contact.create({
       data: {
         ...createContactInput,
         user: {
           connect: {
-            id: 1,
+            id: userId,
           },
         },
       },
@@ -123,10 +123,10 @@ export class ContactsService {
     });
   }
 
-  async update(updateContactInput: UpdateContactInput) {
+  async update(userId: number, updateContactInput: UpdateContactInput) {
     const where: Prisma.ContactWhereUniqueInput = {
       id: updateContactInput.id,
-      userId: 1,
+      userId,
     };
 
     const contact = await this.prisma.contact.findUnique({
@@ -164,10 +164,10 @@ export class ContactsService {
     });
   }
 
-  async remove(id: number) {
+  async remove(userId: number, id: number) {
     const where: Prisma.ContactWhereUniqueInput = {
       id,
-      userId: 1,
+      userId,
     };
 
     const contact = await this.prisma.contact.findUnique({

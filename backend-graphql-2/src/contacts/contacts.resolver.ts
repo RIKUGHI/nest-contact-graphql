@@ -5,6 +5,7 @@ import {
   Args,
   Int,
   Subscription,
+  Context,
 } from '@nestjs/graphql';
 import { ContactsService } from './contacts.service';
 import { Contact } from './entities/contact.entity';
@@ -13,6 +14,8 @@ import { UpdateContactInput } from './dto/update-contact.input';
 import { PaginatedContact } from './entities/paginated-contact.entity';
 import { QueryContactArgs } from './dto/query-contact.args';
 import { PubSub } from 'graphql-subscriptions';
+import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
+import { UseGuards } from '@nestjs/common';
 
 const pubSub = new PubSub();
 
@@ -21,37 +24,57 @@ export class ContactsResolver {
   constructor(private readonly contactsService: ContactsService) {}
 
   @Mutation(() => Contact)
+  @UseGuards(JwtAuthGuard)
   async createContact(
     @Args('createContactInput') createContactInput: CreateContactInput,
+    @Context() ctx,
   ) {
-    const contact = await this.contactsService.create(createContactInput);
+    const { userId } = ctx.req.user;
+    const contact = await this.contactsService.create(
+      userId,
+      createContactInput,
+    );
     pubSub.publish('contactAdded', { contactAdded: contact });
     return contact;
   }
 
   @Query(() => PaginatedContact, { name: 'contacts' })
-  getContacts(@Args() queryContactArgs: QueryContactArgs) {
+  @UseGuards(JwtAuthGuard)
+  getContacts(@Args() queryContactArgs: QueryContactArgs, @Context() ctx) {
+    const { userId } = ctx.req.user;
+
     return this.contactsService.contacts({
+      userId,
       page: queryContactArgs.page,
       q: queryContactArgs.q ?? '',
     });
   }
 
   @Query(() => Contact, { name: 'contact' })
-  getContact(@Args('id', { type: () => Int }) id: number) {
-    return this.contactsService.contact({ id });
+  @UseGuards(JwtAuthGuard)
+  getContact(@Args('id', { type: () => Int }) id: number, @Context() ctx) {
+    const { userId } = ctx.req.user;
+
+    return this.contactsService.contact({ id, userId });
   }
 
   @Mutation(() => Contact)
+  @UseGuards(JwtAuthGuard)
   updateContact(
     @Args('updateContactInput') updateContactInput: UpdateContactInput,
+    @Context() ctx,
   ) {
-    return this.contactsService.update(updateContactInput);
+    const { userId } = ctx.req.user;
+
+    return this.contactsService.update(userId, updateContactInput);
   }
 
   @Mutation(() => Contact)
-  removeContact(@Args('id', { type: () => Int }) id: number) {
-    return this.contactsService.remove(id);
+  @UseGuards(JwtAuthGuard)
+  removeContact(@Args('id', { type: () => Int }) id: number, @Context() ctx) {
+    const { userId } = ctx.req.user;
+
+    return this.contactsService.remove(userId, id);
   }
 
   @Subscription(() => Contact, {

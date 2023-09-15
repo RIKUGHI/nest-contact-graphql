@@ -28,9 +28,21 @@ input CreateUserInput {
   exampleField: Int!
 }
 
+input LoginInput {
+  password: String!
+  username: String!
+}
+
+type LoginResponse {
+  access_token: String!
+  user: User!
+}
+
 type Mutation {
+  Login(login: LoginInput!): LoginResponse!
   createContact(createContactInput: CreateContactInput!): Contact!
   createUser(createUserInput: CreateUserInput!): User!
+  register(register: RegisterInput!): LoginResponse!
   removeContact(id: Int!): Contact!
   removeUser(id: Int!): User!
   updateContact(updateContactInput: UpdateContactInput!): Contact!
@@ -58,6 +70,12 @@ type Query {
   contacts(page: Int!, q: String): PaginatedContact!
   user(id: Int!): User!
   users(page: Int!, q: String): PaginatedUser!
+}
+
+input RegisterInput {
+  name: String!
+  password: String!
+  username: String!
 }
 
 type Subscription {

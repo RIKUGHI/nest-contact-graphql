@@ -5,6 +5,7 @@ import { join } from 'path';
 import { UsersModule } from './users/users.module';
 import { ContactsModule } from './contacts/contacts.module';
 import { PrismaService } from './prisma.service';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
@@ -17,10 +18,11 @@ import { PrismaService } from './prisma.service';
       installSubscriptionHandlers: true,
       // subscriptions: {
       //   'graphql-ws': {
-      //     path: 'ws://localhost:3000/graphql',
+      //     path: '/graphql',
       //   },
       // },
     }),
+    AuthModule,
   ],
 })
 export class AppModule {}
