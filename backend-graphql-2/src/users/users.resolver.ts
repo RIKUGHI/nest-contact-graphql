@@ -6,7 +6,6 @@ import {
   Query,
   ResolveField,
   Resolver,
-  Context,
 } from '@nestjs/graphql';
 import { ContactsService } from 'src/contacts/contacts.service';
 import { PaginatedContact } from 'src/contacts/entities/paginated-contact.entity';
@@ -16,8 +15,6 @@ import { UpdateUserInput } from './dto/update-user.input';
 import { PaginatedUser } from './entities/paginated-user.entity';
 import { User } from './entities/user.entity';
 import { UsersService } from './users.service';
-import { UseGuards } from '@nestjs/common';
-import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 
 @Resolver(() => User)
 export class UsersResolver {
@@ -32,7 +29,6 @@ export class UsersResolver {
   }
 
   @Query(() => PaginatedUser, { name: 'users' })
-  @UseGuards(JwtAuthGuard)
   findAll(@Args() queryUserArg: QueryUserArgs) {
     return this.usersService.users({
       page: queryUserArg.page,
